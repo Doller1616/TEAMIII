@@ -7,7 +7,7 @@ const app = Express();
 function initilizer() {
     corsCongif();
     parserCongif();
-    // dbCongif();
+    dbCongif();
     routesConfig();
     error404Handler();
     globalErrorHandler();
@@ -19,7 +19,10 @@ function parserCongif() {
 }
 
 function dbCongif() {
-    Mongoose.connect('', {});
+    const url = 'mongodb+srv://abhi:...@cluster0.nbwyw.mongodb.net/authcycle';
+    Mongoose.connect(url).then(() => {
+        console.log("DB Connected successfully");
+    });
 }
 
 function routesConfig(){
