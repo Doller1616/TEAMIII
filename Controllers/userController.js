@@ -18,7 +18,7 @@ exports.userSignup = async(req, res) => {
 }
 
 exports.userVerify = async (req, res) => {
-   const {userID} = req.query;
+   const { userID } = req.authToken;
    const status = await signupModel.findOneAndUpdate({_id: userID},{
     isVerified: true,
     updatedOn: new Date()

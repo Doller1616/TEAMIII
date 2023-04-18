@@ -17,9 +17,8 @@ exports.signupCheck = () => ([
 
 exports.signupVerifyCheck = () => ([
    check('id').custom(async (id, { req }) => {
-        const token = await decodeJWT(id);
-        if(token) {
-            req.query = token
+        if(id) {
+            req.authToken = id;
              return true
         } else {
             throw Error('token expired')

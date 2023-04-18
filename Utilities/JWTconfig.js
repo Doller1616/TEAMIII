@@ -15,16 +15,16 @@ exports.createJWT = (userID, expire) => {
     })
 }
 
-exports.decodeJWT = (token) => {
-    return new Promise((resolve, reject) => {
-        JWT.verify(token, SECRET, (err, decoded ) => {
+exports.decodeJWT = (req, res, next) => {
+    const { authToken } = req || {};
+        JWT.verify(authToken, SECRET, (err, decoded ) => {
             if(err) {
                 console.error('JWTconfig.decodeJWT', err);
-                reject('Invalid token');
+                throw Error('Invalid token');
               } else {
-                  resolve(decoded);
+                req.authToken = decoded;
+                next();
               }
         })
-    });
 }
 
