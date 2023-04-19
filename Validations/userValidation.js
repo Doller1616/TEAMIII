@@ -1,10 +1,9 @@
 const { check } = require("express-validator");
 const signupModel = require('../Models/signupModel');
 const Constants= require("../Utilities/Constants");
-const { query } = require("express");
 const { VERIFY_USER } = Constants;
 
-exports.signupCheck = () => ([
+exports.forSignup = () => ([
     check('name').exists().withMessage("name can't be empty"),
     check('pwd').exists().withMessage("pwd can't be empty"),
     check('email').normalizeEmail().custom((async (email, { req }) => {
@@ -17,7 +16,7 @@ exports.signupCheck = () => ([
     })) 
 ]);
 
-exports.signupVerifyCheck = () => ([
+exports.forVerifyUser = () => ([
    check(VERIFY_USER).custom(async (token, { req }) => {
         if(token) {
             req.authToken = token;
@@ -28,7 +27,7 @@ exports.signupVerifyCheck = () => ([
    }), 
 ])
 
-exports.loginCheck = () => ([
+exports.forLogin = () => ([
     check('email', 'Email is Required').isEmail().custom((email, {req}) => {
         return signupModel.findOne({email}).then(user => {
         if (user) {

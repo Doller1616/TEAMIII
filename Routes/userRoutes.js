@@ -1,8 +1,7 @@
 const Express = require('express');
 const { userLogin, userSignup, userVerify } = require('../Controllers/userController');
-const userValid = require('../Validations/userValidation');
-const ValidatorResult = require('../Middlewares/ValidatorResult');
-const { decodeJWT } = require('../Utilities/JWTconfig');
+const validChecks = require('../Validations/userValidation');
+const { authenticate, validateResults } = require('../Middlewares/GlobalMiddleWare');
 const Routes = Express.Router();
 
 
@@ -14,12 +13,12 @@ function initilizer() {
 initilizer();
 
 function getRequestHandler ( ){
-    Routes.get('/verify', userValid.signupVerifyCheck(), ValidatorResult, decodeJWT, userVerify);
+    Routes.get('/verify', validChecks.forVerifyUser(), validateResults, authenticate, userVerify);
 }
 
 function postRequestHandler ( ){
-    Routes.post('/login', userValid.loginCheck(), ValidatorResult, userLogin);
-    Routes.post('/signup', userValid.signupCheck(), ValidatorResult, userSignup);
+    Routes.post('/login', validChecks.forLogin(), validateResults, userLogin);
+    Routes.post('/signup', validChecks.forSignup(), validateResults, userSignup);
 }
 
 module.exports = Routes;
