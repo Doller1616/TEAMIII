@@ -19,14 +19,14 @@ function parserCongif() {
 }
 
 function dbCongif() {
-    const url = 'mongodb+srv://abhi:...@cluster0.nbwyw.mongodb.net/authcycle';
+    const url = 'mongodb+srv://...@cluster0.nbwyw.mongodb.net/authcycle';
     Mongoose.connect(url).then(() => {
         console.log("DB Connected successfully");
     });
 }
 
 function routesConfig(){
-    app.use('/api/v1/', userRoutes)
+    app.use('/auth/', userRoutes)
 }
 
 function corsCongif() {

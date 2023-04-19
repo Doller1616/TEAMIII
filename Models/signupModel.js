@@ -20,7 +20,19 @@ const signupSchema = new Schema({
         type: Boolean,
         default: false
     }
-});
+}, modifyResponse);
+
+function modifyResponse() {
+    return {
+        toJSON: {
+          transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id;
+            delete ret.__v; // remove '__v' in response
+          },
+        },
+      }
+}
 
 signupModel = model('signup',signupSchema);
 module.exports = signupModel; 

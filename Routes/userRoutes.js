@@ -1,5 +1,5 @@
 const Express = require('express');
-const { userLogin, userSignup, userVerify } = require('../Controllers/UserController');
+const { userLogin, userSignup, userVerify } = require('../Controllers/userController');
 const userValid = require('../Validations/userValidation');
 const ValidatorResult = require('../Middlewares/ValidatorResult');
 const { decodeJWT } = require('../Utilities/JWTconfig');

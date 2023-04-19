@@ -1,6 +1,8 @@
 const { check } = require("express-validator");
 const signupModel = require('../Models/signupModel');
-const { decodeJWT } = require("../Utilities/JWTconfig");
+const Constants= require("../Utilities/Constants");
+const { query } = require("express");
+const { VERIFY_USER } = Constants;
 
 exports.signupCheck = () => ([
     check('name').exists().withMessage("name can't be empty"),
@@ -16,9 +18,9 @@ exports.signupCheck = () => ([
 ]);
 
 exports.signupVerifyCheck = () => ([
-   check('id').custom(async (id, { req }) => {
-        if(id) {
-            req.authToken = id;
+   check(VERIFY_USER).custom(async (token, { req }) => {
+        if(token) {
+            req.authToken = token;
              return true
         } else {
             throw Error('token expired')
@@ -27,18 +29,13 @@ exports.signupVerifyCheck = () => ([
 ])
 
 exports.loginCheck = () => ([
-    check('pwd').exists(),
-    check('email').normalizeEmail().custom(((email, { req }) => {
-        
-        // TODO: check Email in DB
-        if(email === 'a@a.com') {
-           req.userInfo = {
-            id: 123,
-            user: 'Name'
-           }
-           return true
+    check('email', 'Email is Required').isEmail().custom((email, {req}) => {
+        return signupModel.findOne({email}).then(user => {
+        if (user) {
+            req.user = user;
+            return true;
         } else {
-            return false
+            throw  new Error('User Does Not Exist');
         }
-    })) 
-]);
+    });
+}), check('pwd', 'Password is Required').isAlphanumeric()]);

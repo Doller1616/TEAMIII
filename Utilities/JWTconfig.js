@@ -1,5 +1,5 @@
 const JWT = require('jsonwebtoken');
-const SECRET = 'Babu-sona'
+const SECRET = 'Oscars'
 
 exports.createJWT = (userID, expire) => {
     return new Promise((resolve, reject) => {
@@ -19,8 +19,7 @@ exports.decodeJWT = (req, res, next) => {
     const { authToken } = req || {};
         JWT.verify(authToken, SECRET, (err, decoded ) => {
             if(err) {
-                console.error('JWTconfig.decodeJWT', err);
-                throw Error('Invalid token');
+                next(err);
               } else {
                 req.authToken = decoded;
                 next();
